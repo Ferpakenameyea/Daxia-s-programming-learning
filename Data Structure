@@ -1,0 +1,187 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+struct ListNode
+{
+    int data;
+    struct ListNode* nextListNode;
+};
+
+struct List
+{
+    const char* name;
+    int length;
+    struct ListNode* firstListNode;
+};
+
+typedef struct List List;
+typedef struct ListNode ListNode;
+
+void SetListName(List* list, const char* newName)
+{
+    char* externName = (char*)malloc(strlen(newName) * sizeof(char));
+    strcpy(externName, newName);
+    list->name = externName;
+}
+
+ListNode* FindListNode(List list, int index)
+{
+    #pragma region Exception
+    if(index > list.length)
+    {
+        goto ERROR;
+    }
+    #pragma endregion
+    
+    ListNode* currentListNode = list.firstListNode;
+    int currentIndex = 1;
+    while(currentIndex < index)
+    {
+        currentListNode = currentListNode->nextListNode;
+        currentIndex++;
+    }
+
+    return currentListNode;
+
+    ERROR:
+    printf("[ERROR]The index of %d is not in the list, which's length is:%d!\n", index, list.length);
+}
+
+void AddNewNodeTo(List* list, int value)
+{
+    ListNode* newListNode = (ListNode*)malloc(sizeof(ListNode));
+    newListNode->data = value;
+    newListNode->nextListNode = NULL;
+
+    if(list->length == 0)
+    {
+        list->firstListNode = newListNode;
+    }
+    else
+    {
+        ListNode* previousListNode = FindListNode(*list, list->length);
+        previousListNode->nextListNode = newListNode;
+    }
+    list->length++;
+    return;
+}
+//this funtion needs to modify the list's length, so it uses pointer.
+
+
+List CreateNewList(const char* name)
+{
+    List* newList = (List*)malloc(sizeof(List));
+    newList->length = 0;
+    newList->firstListNode = NULL;
+    SetListName(newList, name);
+
+    return *newList;
+}
+
+void PrintListNode(List list, int index)
+{
+    #pragma region Exeption
+    if(index > list.length)
+    goto ERROR;
+    #pragma endregion
+
+    ListNode* foundListNode = FindListNode(list, index);
+    printf("ListNode[%d]:\nValue:%d\n", index, foundListNode->data);
+    return;
+    ERROR:
+    printf("[ERROR]The index of %d is not in the list, which's length is:%d!\n", index, list.length);
+    return;
+}
+
+void PrintWholeList(List list)
+{
+    printf("List name:%s\nLength:%d\n", list.name, list.length);
+    ListNode* currentListNode = list.firstListNode;
+    int currentIndex = 1;
+    while(1)
+    {
+        printf("[%d] item: value:%d\n", currentIndex, currentListNode->data);
+        currentIndex++;
+        if(currentIndex > list.length)
+        {
+            break;
+        }
+        else
+        {
+            currentListNode = currentListNode->nextListNode;
+        }
+    }
+}
+
+void DeleteListNode(List* list, int index)
+{
+    #pragma region Execption
+    if(index > list->length)
+    {
+        goto ERROR;
+    }
+    #pragma endregion
+    
+    if(list->length > 1)
+    {
+        ListNode* previousListNode = FindListNode(*list, index-1);
+        ListNode* targetListNode = previousListNode->nextListNode;
+        previousListNode->nextListNode = targetListNode->nextListNode;
+        free(targetListNode);
+    }
+    else
+    {
+        list->firstListNode = NULL;
+        ListNode* targetListNode = FindListNode(*list, index);
+        free(targetListNode);
+    }
+    list->length--;
+    return;
+
+    ERROR:
+    printf("[ERROR]The index of %d is not in the list, which's length is:%d!\n", index, list->length);
+}
+
+void InsertListNode(List* list, int previousListNodeIndex, int value)
+{
+    #pragma region Exception
+    if(previousListNodeIndex > list->length)
+    {
+        goto ERROR;
+    }
+    #pragma endregion
+
+    ListNode* newListNode = (ListNode*)malloc(sizeof(ListNode));
+    newListNode->data = value;
+
+    if(previousListNodeIndex == 0)
+    {
+        newListNode->nextListNode = list->firstListNode;
+        list->firstListNode = newListNode;
+    }
+    else
+    {
+        ListNode* lastListNode = FindListNode(*list, previousListNodeIndex);
+        ListNode* nextListNode = lastListNode->nextListNode;
+        lastListNode->nextListNode = newListNode;
+        newListNode->nextListNode = nextListNode;
+    }
+
+    list->length++;
+
+    return;
+    ERROR:
+    printf("[ERROR]The index of %d is not in the list, which's length is:%d!\n", previousListNodeIndex, list->length);
+    return;
+}
+
+int main()
+{
+    List list = CreateNewList("List of values");
+    AddNewNodeTo(&list, 15);
+    AddNewNodeTo(&list, 20);
+    AddNewNodeTo(&list, 13541);
+    DeleteListNode(&list, 5);
+    InsertListNode(&list, 1, 41);
+    PrintWholeList(list);
+}
