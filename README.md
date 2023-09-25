@@ -3,11 +3,11 @@ This is for MC DAXIA and their buddies to learn C PROGRAMMING!
 
 # Daxias C Programming STYLE!
 ## OOC!  Fuck Procedure Oriented Programming!
-```
+```C
 #define new(Type) (Type*)malloc(sizeof(Type))
 ```
 ## Create full-name variables! STOP USING ABBREVIATIONS!!!!!!!
-```
+```C
 //POOP AND CRAP!!!
 int x, y, z, a, b, c;
 //GOOD!!! ZBC!!!
