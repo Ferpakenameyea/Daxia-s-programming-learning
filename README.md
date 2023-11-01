@@ -35,7 +35,7 @@ int DotMultiple(Vector3 a, Vector3 b){
 }
 
 int main(){
-  //write
+  //write write write!
   Vector3 vecA, vecB;
   scanf("%d%d%d", &vecA.x, &vecA.y, &vecA.z);
   scanf("%d%d%d", &vecB.x, &vecB.y, &vecB.z);
