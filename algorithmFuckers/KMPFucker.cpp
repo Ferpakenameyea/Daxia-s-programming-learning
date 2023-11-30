@@ -64,7 +64,7 @@ public:
         return KMPSearch(string + fromIndex, subString, strlen(string), strlen(subString));
     }
 
-    static std::vector<int> KMPSearchFindAll(const char* string, const char* subString, int findRange, int subStringLength) {
+    static std::vector<int> KMPSearchFindAll(const char* string, const char* subString, int findRange, int subStringLength, bool skipFullString = true) {
         std::vector<int> result;
         std::vector<int> next = BuildNextArray(subString, subStringLength);
         int currentFrom = 0;
@@ -74,23 +74,24 @@ public:
                 break;
             }
             result.push_back(currentFrom + foundIndex);
-            string += subStringLength + foundIndex;
-            currentFrom += subStringLength + foundIndex;
-            findRange -= subStringLength + foundIndex;
+            int skipper = (skipFullString ? subStringLength : 1);
+            string += skipper + foundIndex;
+            currentFrom += skipper + foundIndex;
+            findRange -= skipper + foundIndex;
         }
         return result;
     }
 
-    static std::vector<int> KMPSearchFindAll(const char* string, const char* subString) {
-        return KMPSearchFindAll(string, subString, strlen(string), strlen(subString));
+    static std::vector<int> KMPSearchFindAll(const char* string, const char* subString, bool skipFullString = true) {
+        return KMPSearchFindAll(string, subString, strlen(string), strlen(subString), skipFullString);
     }
 };
 
 int main() {
-    char* stringA = "Hello, world! Hello!";
-    char* stringB = "llo";
-    auto result = KMPSolver::KMPSearchFindAll(stringA, stringB);
-    for(auto i : result) {
-        std::cout << i << ' ';
-    }
+    char* stringA = "abcabcabcabc";
+    char* stringB = "abcabc";
+    auto res = KMPSolver::KMPSearchFindAll(stringA, stringB, false);
+    for(auto r : res) {
+        std::cout << r << " ";
+    }   
 }
