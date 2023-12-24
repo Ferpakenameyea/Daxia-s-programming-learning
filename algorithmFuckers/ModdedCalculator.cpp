@@ -44,6 +44,10 @@ public:
         this->modder = modder;
     }
 
+    T GetModder() const {
+        return modder;
+    }
+
     void operator+=(const T other){
         this->current = (this->current + other % modder) % modder;
     }
@@ -53,7 +57,7 @@ public:
     }
 
     void operator*=(const T other){
-        this->current = (this->current * (other % modder)) % modder;
+        this->current = (this->current * ((other % modder + modder) % modder)) % modder;
     }
 
     void operator/=(const T other){
