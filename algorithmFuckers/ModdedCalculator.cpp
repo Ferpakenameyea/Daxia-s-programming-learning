@@ -48,26 +48,45 @@ public:
         return modder;
     }
 
-    void operator+=(const T other){
+    ModdedCalculator& operator+=(const T other){
         this->current = (this->current + other % modder) % modder;
+        return *this;
     }
 
-    void operator-=(const T other){
+    ModdedCalculator& operator-=(const T other){
         this->current = (this->current - other % modder + modder) % modder;
+        return *this;
     }
 
-    void operator*=(const T other){
+    ModdedCalculator& operator*=(const T other){
         this->current = (this->current * ((other % modder + modder) % modder)) % modder;
+        return *this;
     }
 
-    void operator/=(const T other){
+    ModdedCalculator& operator/=(const T other){
         this->current = (this->current * (GetInv(other) % modder)) % modder;
+        return *this;
+    }
+
+    ModdedCalculator& Add(const T& other) {
+        return *this += other;
+    }
+
+    ModdedCalculator& Minus(const T& other) {
+        return *this -= other;
+    }
+
+    ModdedCalculator& Mul(const T& other) {
+        return *this *= other;
+    }
+
+    ModdedCalculator& Div(const T& other) {
+        return *this /= other;
     }
 };
 
 int main() {
     ModdedCalculator<long long> cal(500);
-    cal.SetCurrent(30);
-    cal -= 50;
-    std::cout << cal.GetCurrent();
+    cal.SetCurrent(1);
+    std::cout << cal.Mul(3).GetCurrent();
 }

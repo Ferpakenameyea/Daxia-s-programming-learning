@@ -44,11 +44,11 @@ public:
         return e[1][elemCount];
     }
 
-    inline long long GetResult(int from, int to) {
+    inline long long GetResult(int from, int to) const {
         return this->e[from][to];
     }
 
-    inline int GetRoot(int from, int to) {
+    inline int GetRoot(int from, int to) const {
         return this->root[from][to];
     }
 };
